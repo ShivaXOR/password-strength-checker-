@@ -1,1 +1,41 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker</title>
+    <link rel="stylesheet" href="static-files/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Password Strength Checker</h1>
+        <input type="password" id="password" placeholder="Enter your password">
+        <button onclick="checkStrength()">Check Strength</button>
+        <p id="result"></p>
+    </div>
+    <script>
+        async function checkStrength() {
+            const password = document.getElementById("password").value;
+            const response = await fetch("/check", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ password }),
+            });
+            const data = await response.json();
+            const result = document.getElementById("result");
+            if (data.strength <= 2) {
+                result.textContent = "Weak Password";
+                result.style.color = "red";
+            } else if (data.strength <= 4) {
+                result.textContent = "Medium Password";
+                result.style.color = "orange";
+            } else {
+                result.textContent = "Strong Password";
+                result.style.color = "green";
+            }
+        }
+    </script>
+</body>
+</html>
